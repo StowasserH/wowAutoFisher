@@ -26,7 +26,7 @@ You need some software to run this script
 #### Recommend
 
   * I use Autokey to start and stop the script. The hotkey function is very useful.
-  * The script can use two methods to perform mouse clicks in the wow clinet. Unfortunately, pyautogui does not work 100 percent reliably when catching the fish. That's why I added the possibility to use xte. This made it possible to achieve westward better stability.
+  * The script can use two methods to perform mouse clicks in the wow clinet. Unfortunately, pyautogui does not work 100 percent reliably when catching the fish. That's why I added the possibility to use xte. This made it possible to achieve better stability.
 
 ### Installing 
 
