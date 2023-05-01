@@ -1,5 +1,18 @@
+#!/usr/bin/autokey
+# -*- coding: utf-8 -*-
+"""A small script that automates manual fishing in World of Warcraft.
+   https://github.com/StowasserH/wowAutoFisher
+"""
+
+__author__ = "harald@stowasser.tv"
+__copyright__ = "2023 Harald Stowasser"
+__credits__ = ["12345ieee"]
+__license__ = "MIT"
+__maintainer__ = "Harald Stowasser"
+__email__ = "harald@stowasser.tv"
+__status__ = "Production"
+
 import pyautogui
-import sys
 import time
 from PIL import ImageGrab
 
@@ -23,10 +36,10 @@ xte = 1
 # ___________________________________________________
 #
 # Area where the swimmer is searched
-xmin = res_x // 4
-xmax = res_x - res_x // 4
-ymin = res_y // 6
-ymax = res_y - res_y // 2 + 100
+x_min = res_x // 4
+x_max = res_x - res_x // 4
+y_min = res_y // 6
+y_max = res_y - res_y // 2 + 100
 
 end_script = False
 
@@ -38,10 +51,10 @@ def xte(command):
 
 
 if v > 0:
-    print(" search from " + str(xmin) + ":" + str(ymin) + " to " + str(xmax) + ":" + str(ymax))
+    print(" search from " + str(x_min) + ":" + str(y_min) + " to " + str(x_max) + ":" + str(y_max))
 
 
-def checkhook(x, y, px):
+def check_float(x, y, px):
     n = r = g = b = 0
     for xx in range(x - 10, x + 10, 2):
         for yy in range(y - 10, y + 10, 2):
@@ -54,17 +67,16 @@ def checkhook(x, y, px):
     # rgb(111, 95, 68)
 
 
-def findhook():
-    import pyautogui
+def find_float():
     finds = []
     x, y = pyautogui.position()
     if v > 1:
         print("  find from " + str(x) + " " + str(y))
     px = ImageGrab.grab().load()
-    for xx in range(xmin, xmax, 4):
-        for yy in range(ymin, ymax, 4):
+    for xx in range(x_min, x_max, 4):
+        for yy in range(y_min, y_max, 4):
             if px[xx, yy][0] > sw[0] and px[xx, yy][1] > sw[1] and px[xx, yy][2] > sw[1]:
-                r, g, b = checkhook(xx, yy, px)
+                r, g, b = check_float(xx, yy, px)
                 finds.append((r + g + b, xx, yy, r, g, b))
     if len(finds) > 40:
         if v > 0:
@@ -77,7 +89,7 @@ def findhook():
         pyautogui.moveTo(last[1], last[2])
         time.sleep(0.1)
         px2 = ImageGrab.grab().load()
-        r, g, b = checkhook(last[1], last[2], px2)
+        r, g, b = check_float(last[1], last[2], px2)
         if v > 1:
             print("  ." + str(last[1]) + " " + str(last[2]))
         if r > last[3] + th_sw and g > last[3] + th_sw and b > last[4] + th_sw:
@@ -86,13 +98,13 @@ def findhook():
     return None
 
 
-def wait_spash(last):
+def wait_splash(last):
     if v > 0:
         print("found " + str(last))
-    starttime = time.time()
-    while time.time() - starttime < 12:
+    start_time = time.time()
+    while time.time() - start_time < 12:
         px2 = ImageGrab.grab().load()
-        r, g, b = checkhook(last[1], last[2], px2)
+        r, g, b = check_float(last[1], last[2], px2)
         if r > last[3] + th_sp and g > last[3] + th_sp and b > last[4] + th_sp:
             return True
         time.sleep(0.1)
@@ -124,9 +136,9 @@ def check_end():
 while check_end():
     fish()
     time.sleep(0.5)
-    find = findhook()
+    find = find_float()
     if find:
-        splash = wait_spash(find)
+        splash = wait_splash(find)
         if not splash:
             if v > 0:
                 print("  no splash detected")
@@ -137,5 +149,3 @@ while check_end():
             else:
                 pyautogui.click(button='right')
             time.sleep(4)
-
-
